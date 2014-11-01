@@ -8,10 +8,10 @@
 #
 #
 
-data_ids = data_bag('users')
+data_ids = data_bag('login_users')
 
 data_ids.each do |id|
-  u = data_bag_item('users', id)
+  u = Chef::EncryptedDataBagItem.load('login_users', id)
 
   group u["groups"] do
     action :create
@@ -37,7 +37,7 @@ data_ids.each do |id|
   file "#{u['home']}/.ssh/authorized_keys" do
     owner u['username']
     group u['groups']
-    mode 0600
+    mode 0601
     content u["ssh_keys"]
   end
 end
